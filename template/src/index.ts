@@ -1,13 +1,16 @@
 import * as mdk from 'mdkjs'
+import foo from './foo'
+import main from './main'
 
+// 入口，导出pack实例
 export default new mdk.Pack({
     packname: 'mypack',
+    version: '1.17.1',
+    description: 'thie is a demo pack',
+    modules: [
+        foo,
+    ],
     files: [
-        new mdk.File({
-            filename: 'main24',
-            render(ctx) {
-                ctx.add('say 1112')
-            }
-        })
+        main,
     ]
 })

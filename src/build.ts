@@ -1,24 +1,24 @@
 import { exec } from 'child_process'
-import ora from 'ora'
-import chokidar from 'chokidar'
-import fs from 'fs-extra'
+import * as ora from 'ora'
+import * as chokidar from 'chokidar'
+import * as fs from 'fs-extra'
 import * as path from 'path'
-import chalk from 'chalk'
+import * as chalk from 'chalk'
 
 const map = Object.create(null)
 let flag = false
 
 const spinner = ora('compilering...')
 
-const handle = debounce((input, output) => {
+const handle = debounce((input: string, output: string) => {
     spinner.start()
     run(input, output)
 })
 
-const normal = path => path.replace(/\\/g, '/')
+const normal = (path: string) => path.replace(/\\/g, '/')
 
-function getFileList(dir) {
-    const result = []
+function getFileList(dir: string) {
+    const result: string[] = []
     try {
         fs.readdirSync(dir).forEach(item => {
             const name = path.resolve(process.cwd(), dir, item)
@@ -35,16 +35,16 @@ function getFileList(dir) {
     }
     return result.map(normal)
 }
-function debounce(fn, delay = 300) {
-    let timestamp;
-    return (...args) => {
+function debounce(fn: any, delay = 300) {
+    let timestamp: number;
+    return (...args: any) => {
         if (!timestamp || Date.now() - timestamp > delay) {
-            fn.apply(this, args)
+            fn.apply(null, args)
         }
         timestamp = Date.now()
     }
 }
-const tscode = (input) => `
+const tscode = (input: string) => `
 import { Pack } from 'mdkjs';
 import { MD5 } from 'object-hash';
 import pack from '${input}';
@@ -58,7 +58,7 @@ function build(pack: Pack) {
             (acc, info) => {
                 const obj = {
                     name: info.name,
-                    text: info.type === 'file' ? info.extra.map((item: any) => item.text).join('\n') : info.text
+                    text: info.type === 'file' ? info.extra.map((item: any) => item.text).join('\\n') : info.text
                 };
                 const hash = MD5(obj);
                 acc.push({ ...obj, hash });
@@ -75,7 +75,7 @@ function build(pack: Pack) {
 console.log(JSON.stringify(build(pack)));
 `.replace(/\n/g, '')
 
-function run(input, output) {
+function run(input: string, output: string) {
     exec(`ts-node -T -e "${tscode(input)}"`, (err, stdout, stderr) => {
         if (err) console.log('err', err)
         if (stderr) {
@@ -139,7 +139,7 @@ function run(input, output) {
     })
 }
 
-export default function(options) {
+export default function(options: Record<string, string>) {
     const { input, output, watch } = options
     watch ? chokidar.watch(`${path.dirname(input)}/**/*`).on('all', () => handle(input, output)) : handle(input, output)
 }

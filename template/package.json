@@ -4,14 +4,14 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "build": "npx mdk-cli build",
-      "watch": "npx mdk-cli build --watch"
+      "build": "npx mdkjs-cli build",
+      "watch": "npx mdkjs-cli build --watch"
     },
     "devDependencies": {
-      "mdkjs": "{{mdkjs}}",
-      "object-hash": "{{object-hash}}",
-      "ts-node": "{{ts-node}}",
-      "typescript": "{{typescript}}"
+      "mdkjs": "^{{mdkjs}}",
+      "object-hash": "^2.2.0",
+      "ts-node": "^{{ts-node}}",
+      "typescript": "^{{typescript}}"
     },
     "dependencies": {}
 }
